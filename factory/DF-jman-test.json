@@ -1,0 +1,9 @@
+{
+	"name": "DF-jman-test",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "3a65f08b-1a92-44f3-97c6-c1d3e90dc46c",
+		"tenantId": "2800c0a0-70e9-49be-8733-faeaa6aced99"
+	}
+}
