@@ -509,6 +509,43 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "Data flow Clean",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Copy data to RAW",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF2_clean_superstore",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
 					}
 				],
 				"policy": {
@@ -521,7 +558,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DS2_input')]",
-				"[concat(variables('factoryId'), '/datasets/DS2_raw')]"
+				"[concat(variables('factoryId'), '/datasets/DS2_raw')]",
+				"[concat(variables('factoryId'), '/dataflows/DF2_clean_superstore')]"
 			]
 		},
 		{
@@ -1065,7 +1103,13 @@
 					],
 					"transformations": [
 						{
-							"name": "filter1"
+							"name": "AddDuplicate"
+						},
+						{
+							"name": "RemoveDuplicate"
+						},
+						{
+							"name": "select1"
 						}
 					],
 					"scriptLines": [
@@ -1085,8 +1129,24 @@
 						"     validateSchema: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
 						"     format: 'table') ~> source1",
-						"source1 filter((!isNull(Email)) && (!isNull(Country)) && (!isNull(ZipCode)) && (!isNull(State)) && (!isNull(State)) && (!isNull(Address))) ~> filter1",
-						"filter1 sink(allowSchemaDrift: true,",
+						"source1 window(asc(CustomerID, true),",
+						"     Duplicate = iif(lag(CustomerID) == CustomerID, true(), false())) ~> AddDuplicate",
+						"AddDuplicate filter((!Duplicate) && (!isNull(Email))) ~> RemoveDuplicate",
+						"RemoveDuplicate select(mapColumn(",
+						"          CustomerID,",
+						"          FirstName,",
+						"          LastName,",
+						"          Email,",
+						"          PhoneNumber,",
+						"          Address,",
+						"          City,",
+						"          State,",
+						"          ZipCode,",
+						"          Country",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     deletable:false,",
 						"     insertable:true,",
@@ -1136,7 +1196,10 @@
 					],
 					"transformations": [
 						{
-							"name": "sort1"
+							"name": "AddDuplicate"
+						},
+						{
+							"name": "RemoveDuplicate"
 						}
 					],
 					"scriptLines": [
@@ -1153,8 +1216,10 @@
 						"     validateSchema: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
 						"     format: 'table') ~> source1",
-						"source1 sort(asc(OrderID, true)) ~> sort1",
-						"sort1 sink(allowSchemaDrift: true,",
+						"source1 window(asc(OrderID, true),",
+						"     Duplicate = iif(lag(OrderID) == OrderID, true(), false())) ~> AddDuplicate",
+						"AddDuplicate filter(!Duplicate) ~> RemoveDuplicate",
+						"RemoveDuplicate sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     deletable:false,",
 						"     insertable:true,",

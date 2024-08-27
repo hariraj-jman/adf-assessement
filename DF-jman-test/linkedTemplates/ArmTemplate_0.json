@@ -542,79 +542,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/PL2_toSQL_raw')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data to RAW",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "ExcelSource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								}
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false,
-								"tableOption": "autoCreate",
-								"disableMetricsCollection": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "DS2_input",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "DS2_raw",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"folder": {
-					"name": "PL2"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS2_input')]",
-				"[concat(variables('factoryId'), '/datasets/DS2_raw')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/DF1_clean_customers')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -646,7 +573,13 @@
 					],
 					"transformations": [
 						{
-							"name": "filter1"
+							"name": "AddDuplicate"
+						},
+						{
+							"name": "RemoveDuplicate"
+						},
+						{
+							"name": "select1"
 						}
 					],
 					"scriptLines": [
@@ -666,8 +599,24 @@
 						"     validateSchema: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
 						"     format: 'table') ~> source1",
-						"source1 filter((!isNull(Email)) && (!isNull(Country)) && (!isNull(ZipCode)) && (!isNull(State)) && (!isNull(State)) && (!isNull(Address))) ~> filter1",
-						"filter1 sink(allowSchemaDrift: true,",
+						"source1 window(asc(CustomerID, true),",
+						"     Duplicate = iif(lag(CustomerID) == CustomerID, true(), false())) ~> AddDuplicate",
+						"AddDuplicate filter((!Duplicate) && (!isNull(Email))) ~> RemoveDuplicate",
+						"RemoveDuplicate select(mapColumn(",
+						"          CustomerID,",
+						"          FirstName,",
+						"          LastName,",
+						"          Email,",
+						"          PhoneNumber,",
+						"          Address,",
+						"          City,",
+						"          State,",
+						"          ZipCode,",
+						"          Country",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     deletable:false,",
 						"     insertable:true,",
@@ -717,7 +666,10 @@
 					],
 					"transformations": [
 						{
-							"name": "sort1"
+							"name": "AddDuplicate"
+						},
+						{
+							"name": "RemoveDuplicate"
 						}
 					],
 					"scriptLines": [
@@ -734,8 +686,10 @@
 						"     validateSchema: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
 						"     format: 'table') ~> source1",
-						"source1 sort(asc(OrderID, true)) ~> sort1",
-						"sort1 sink(allowSchemaDrift: true,",
+						"source1 window(asc(OrderID, true),",
+						"     Duplicate = iif(lag(OrderID) == OrderID, true(), false())) ~> AddDuplicate",
+						"AddDuplicate filter(!Duplicate) ~> RemoveDuplicate",
+						"RemoveDuplicate sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     deletable:false,",
 						"     insertable:true,",
@@ -1319,6 +1273,117 @@
 				"[concat(variables('factoryId'), '/dataflows/DF1_clean_orders')]",
 				"[concat(variables('factoryId'), '/dataflows/DF1_clean_customers')]",
 				"[concat(variables('factoryId'), '/dataflows/DF1_join_table')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL2_toSQL_raw')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data to RAW",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS2_input",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS2_raw",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Data flow Clean",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Copy data to RAW",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF2_clean_superstore",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "PL2"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS2_input')]",
+				"[concat(variables('factoryId'), '/datasets/DS2_raw')]",
+				"[concat(variables('factoryId'), '/dataflows/DF2_clean_superstore')]"
 			]
 		}
 	]
