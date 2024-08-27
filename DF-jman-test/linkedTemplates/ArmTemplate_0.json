@@ -68,13 +68,16 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_SQL_raw_customers')]",
+			"name": "[concat(parameters('factoryName'), '/DS1_SQL_raw_customers')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "AzureSqlDatabaseTest",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DS1/SQL_raw"
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
@@ -89,13 +92,16 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_SQL_raw_orders')]",
+			"name": "[concat(parameters('factoryName'), '/DS1_SQL_raw_orders')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "AzureSqlDatabaseTest",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DS1/SQL_raw"
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
@@ -110,13 +116,88 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_cons_customers')]",
+			"name": "[concat(parameters('factoryName'), '/DS1_SQL_report_result')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseTest",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DS1/SQL_report"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "report",
+					"table": "result"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabaseTest')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS1_SQL_stage_customers')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseTest",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DS1/SQL_stage"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "stage",
+					"table": "customers"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabaseTest')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS1_SQL_stage_orders')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseTest",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DS1/SQL_stage"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "stage",
+					"table": "orders"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabaseTest')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS1_cons_customers')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "AzureBlobStorageTest",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DS1/consolidated"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
@@ -139,13 +220,16 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_cons_orders')]",
+			"name": "[concat(parameters('factoryName'), '/DS1_cons_orders')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "AzureBlobStorageTest",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DS1/consolidated"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
@@ -168,13 +252,16 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_input_cusomers')]",
+			"name": "[concat(parameters('factoryName'), '/DS1_input_customers')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "AzureBlobStorageTest",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DS1/BLOB_input"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
@@ -236,13 +323,16 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_input_orders')]",
+			"name": "[concat(parameters('factoryName'), '/DS1_input_orders')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "AzureBlobStorageTest",
 					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DS1/BLOB_input"
 				},
 				"annotations": [],
 				"type": "Excel",
@@ -290,7 +380,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/PL_extract')]",
+			"name": "[concat(parameters('factoryName'), '/PL1_consolidate')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -342,14 +432,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "DS_input_orders",
+								"referenceName": "DS1_input_orders",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "DS_cons_orders",
+								"referenceName": "DS1_cons_orders",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -412,14 +502,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "DS_input_cusomers",
+								"referenceName": "DS1_input_customers",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "DS_cons_customers",
+								"referenceName": "DS1_cons_customers",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -429,18 +519,21 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
+				"folder": {
+					"name": "PL1"
+				},
 				"annotations": [],
 				"lastPublishTime": "2024-08-27T09:42:01Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_input_orders')]",
-				"[concat(variables('factoryId'), '/datasets/DS_cons_orders')]",
-				"[concat(variables('factoryId'), '/datasets/DS_input_cusomers')]",
-				"[concat(variables('factoryId'), '/datasets/DS_cons_customers')]"
+				"[concat(variables('factoryId'), '/datasets/DS1_input_orders')]",
+				"[concat(variables('factoryId'), '/datasets/DS1_cons_orders')]",
+				"[concat(variables('factoryId'), '/datasets/DS1_input_customers')]",
+				"[concat(variables('factoryId'), '/datasets/DS1_cons_customers')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/PL_toSQL')]",
+			"name": "[concat(parameters('factoryName'), '/PL1_toSQL_raw')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -488,14 +581,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "DS_cons_orders",
+								"referenceName": "DS1_cons_orders",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "DS_SQL_raw_orders",
+								"referenceName": "DS1_SQL_raw_orders",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -551,14 +644,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "DS_cons_customers",
+								"referenceName": "DS1_cons_customers",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "DS_SQL_raw_customers",
+								"referenceName": "DS1_SQL_raw_customers",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -568,13 +661,395 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
+				"folder": {
+					"name": "PL1"
+				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_cons_orders')]",
-				"[concat(variables('factoryId'), '/datasets/DS_SQL_raw_orders')]",
-				"[concat(variables('factoryId'), '/datasets/DS_cons_customers')]",
-				"[concat(variables('factoryId'), '/datasets/DS_SQL_raw_customers')]"
+				"[concat(variables('factoryId'), '/datasets/DS1_cons_orders')]",
+				"[concat(variables('factoryId'), '/datasets/DS1_SQL_raw_orders')]",
+				"[concat(variables('factoryId'), '/datasets/DS1_cons_customers')]",
+				"[concat(variables('factoryId'), '/datasets/DS1_SQL_raw_customers')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF1_clean_customers')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "DF1"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS1_SQL_raw_customers",
+								"type": "DatasetReference"
+							},
+							"name": "source1",
+							"description": "Import data from DS1_SQL_raw_customers and modify types accordingly"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS1_SQL_stage_customers",
+								"type": "DatasetReference"
+							},
+							"name": "sink1",
+							"description": "Export data to AzureSqlTable1 "
+						}
+					],
+					"transformations": [
+						{
+							"name": "filter1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          CustomerID as string,",
+						"          FirstName as string,",
+						"          LastName as string,",
+						"          Email as string,",
+						"          PhoneNumber as string,",
+						"          Address as string,",
+						"          City as string,",
+						"          State as string,",
+						"          ZipCode as integer,",
+						"          Country as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source1",
+						"source1 filter((!isNull(Email)) && (!isNull(Country)) && (!isNull(ZipCode)) && (!isNull(State)) && (!isNull(State)) && (!isNull(Address))) ~> filter1",
+						"filter1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     recreate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS1_SQL_raw_customers')]",
+				"[concat(variables('factoryId'), '/datasets/DS1_SQL_stage_customers')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF1_clean_orders')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "DF1"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS1_SQL_raw_orders",
+								"type": "DatasetReference"
+							},
+							"name": "source1",
+							"description": "Import data from DS1_SQL_raw_orders and modify types accordingly"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS1_SQL_stage_orders",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "FilterNullForOrderTimeStamp"
+						},
+						{
+							"name": "cast1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          OrderID as integer,",
+						"          ProductID as string,",
+						"          ProductName as string,",
+						"          Quantity as integer,",
+						"          OrderTimestamp as timestamp,",
+						"          Price as float,",
+						"          CustomerID as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source1",
+						"source1 filter((!isNull(OrderTimestamp))) ~> FilterNullForOrderTimeStamp",
+						"FilterNullForOrderTimeStamp cast(output(",
+						"          OrderID as integer",
+						"     ),",
+						"     errors: true) ~> cast1",
+						"cast1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     recreate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS1_SQL_raw_orders')]",
+				"[concat(variables('factoryId'), '/datasets/DS1_SQL_stage_orders')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF1_join_table')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "DF1"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS1_SQL_stage_customers",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS1_SQL_stage_orders",
+								"type": "DatasetReference"
+							},
+							"name": "source2"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS1_SQL_report_result",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "join1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          CustomerID as string,",
+						"          FirstName as string,",
+						"          LastName as string,",
+						"          Email as string,",
+						"          PhoneNumber as string,",
+						"          Address as string,",
+						"          City as string,",
+						"          State as string,",
+						"          ZipCode as integer,",
+						"          Country as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source1",
+						"source(output(",
+						"          OrderID as integer,",
+						"          ProductID as string,",
+						"          ProductName as string,",
+						"          Quantity as integer,",
+						"          OrderTimestamp as timestamp,",
+						"          Price as float,",
+						"          CustomerID as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source2",
+						"source1, source2 join(source1@CustomerID == source2@CustomerID,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     recreate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS1_SQL_stage_customers')]",
+				"[concat(variables('factoryId'), '/datasets/DS1_SQL_stage_orders')]",
+				"[concat(variables('factoryId'), '/datasets/DS1_SQL_report_result')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL1_toSQL_report')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow Join",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF1_join_table",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"source2": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "PL1"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF1_join_table')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL1_toSQL_stage')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow orders",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF1_clean_orders",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "Data flow customers",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Data flow orders",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF1_clean_customers",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "PL1"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF1_clean_orders')]",
+				"[concat(variables('factoryId'), '/dataflows/DF1_clean_customers')]"
 			]
 		}
 	]
