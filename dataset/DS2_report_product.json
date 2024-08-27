@@ -1,0 +1,19 @@
+{
+	"name": "DS2_report_product",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabaseTest",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DS2"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "report",
+			"table": "superstore_product"
+		}
+	}
+}

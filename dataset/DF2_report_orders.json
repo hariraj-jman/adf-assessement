@@ -1,0 +1,19 @@
+{
+	"name": "DF2_report_orders",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabaseTest",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DS2"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "report",
+			"table": "superstore_orders"
+		}
+	}
+}
