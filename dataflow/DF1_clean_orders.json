@@ -1,0 +1,62 @@
+{
+	"name": "DF1_clean_orders",
+	"properties": {
+		"folder": {
+			"name": "DF1"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS1_SQL_raw_orders",
+						"type": "DatasetReference"
+					},
+					"name": "source1",
+					"description": "Import data from DS1_SQL_raw_orders and modify types accordingly"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS1_SQL_stage_orders",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "FilterNullForOrderTimeStamp"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          OrderID as integer,",
+				"          ProductID as string,",
+				"          ProductName as string,",
+				"          Quantity as integer,",
+				"          OrderTimestamp as timestamp,",
+				"          Price as float,",
+				"          CustomerID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source1 filter((!isNull(OrderTimestamp))) ~> FilterNullForOrderTimeStamp",
+				"FilterNullForOrderTimeStamp sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     recreate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

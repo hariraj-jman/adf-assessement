@@ -1,9 +1,12 @@
 {
-	"name": "DS_input_cusomers",
+	"name": "DS1_input_customers",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorageTest",
 			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DS1/BLOB_input"
 		},
 		"annotations": [],
 		"type": "DelimitedText",

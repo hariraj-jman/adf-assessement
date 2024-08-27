@@ -1,9 +1,12 @@
 {
-	"name": "DS_SQL_raw_customers",
+	"name": "DS1_SQL_raw_customers",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabaseTest",
 			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DS1/SQL_raw"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",

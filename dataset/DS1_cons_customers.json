@@ -1,9 +1,12 @@
 {
-	"name": "DS_cons_customers",
+	"name": "DS1_cons_customers",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorageTest",
 			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DS1/consolidated"
 		},
 		"annotations": [],
 		"type": "DelimitedText",

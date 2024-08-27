@@ -1,5 +1,5 @@
 {
-	"name": "PL_main",
+	"name": "PL1_consolidate",
 	"properties": {
 		"activities": [
 			{
@@ -49,13 +49,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "DS_input_orders",
+						"referenceName": "DS1_input_orders",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "DS_cons_orders",
+						"referenceName": "DS1_cons_orders",
 						"type": "DatasetReference"
 					}
 				]
@@ -117,18 +117,21 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "DS_input_cusomers",
+						"referenceName": "DS1_input_customers",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "DS_cons_customers",
+						"referenceName": "DS1_cons_customers",
 						"type": "DatasetReference"
 					}
 				]
 			}
 		],
+		"folder": {
+			"name": "PL1"
+		},
 		"annotations": [],
 		"lastPublishTime": "2024-08-27T09:42:01Z"
 	},

@@ -1,18 +1,18 @@
 {
-	"name": "DS1_SQL_raw_orders",
+	"name": "DS1_SQL_stage_orders",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabaseTest",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "DS1/SQL_raw"
+			"name": "DS1/SQL_stage"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "raw",
+			"schema": "stage",
 			"table": "orders"
 		}
 	}

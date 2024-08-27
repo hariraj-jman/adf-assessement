@@ -1,9 +1,12 @@
 {
-	"name": "DS_input_orders",
+	"name": "DS1_input_orders",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorageTest",
 			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DS1/BLOB_input"
 		},
 		"annotations": [],
 		"type": "Excel",

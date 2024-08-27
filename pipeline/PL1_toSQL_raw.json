@@ -1,5 +1,5 @@
 {
-	"name": "PL_toSQL",
+	"name": "PL1_toSQL_raw",
 	"properties": {
 		"activities": [
 			{
@@ -45,13 +45,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "DS_cons_orders",
+						"referenceName": "DS1_cons_orders",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "DS_SQL_raw_orders",
+						"referenceName": "DS1_SQL_raw_orders",
 						"type": "DatasetReference"
 					}
 				]
@@ -106,18 +106,21 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "DS_cons_customers",
+						"referenceName": "DS1_cons_customers",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "DS_SQL_raw_customers",
+						"referenceName": "DS1_SQL_raw_customers",
 						"type": "DatasetReference"
 					}
 				]
 			}
 		],
+		"folder": {
+			"name": "PL1"
+		},
 		"annotations": []
 	}
 }

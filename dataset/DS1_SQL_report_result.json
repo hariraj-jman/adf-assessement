@@ -1,19 +1,19 @@
 {
-	"name": "DS1_SQL_raw_orders",
+	"name": "DS1_SQL_report_result",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabaseTest",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "DS1/SQL_raw"
+			"name": "DS1/SQL_report"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "raw",
-			"table": "orders"
+			"schema": "report",
+			"table": "result"
 		}
 	}
 }
