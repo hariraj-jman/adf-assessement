@@ -1,51 +1,36 @@
 {
-	"name": "DF1_clean_orders",
+	"name": "DF2_clean_superstore",
 	"properties": {
 		"folder": {
-			"name": "DF1"
+			"name": "DF2"
 		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "DS1_SQL_raw_orders",
+						"referenceName": "DS2_raw",
 						"type": "DatasetReference"
 					},
-					"name": "source1",
-					"description": "Import data from DS1_SQL_raw_orders and modify types accordingly"
+					"name": "source1"
 				}
 			],
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "DS1_SQL_stage_orders",
+						"referenceName": "DS2_stage",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
 				}
 			],
-			"transformations": [
-				{
-					"name": "sort1"
-				}
-			],
+			"transformations": [],
 			"scriptLines": [
-				"source(output(",
-				"          OrderID as integer,",
-				"          ProductID as string,",
-				"          ProductName as string,",
-				"          Quantity as integer,",
-				"          OrderTimestamp as timestamp,",
-				"          Price as float,",
-				"          CustomerID as string",
-				"     ),",
-				"     allowSchemaDrift: true,",
+				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"source1 sort(asc(OrderID, true)) ~> sort1",
-				"sort1 sink(allowSchemaDrift: true,",
+				"source1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",

@@ -1,0 +1,19 @@
+{
+	"name": "DS2_stage",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabaseTest",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DS2"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "stage",
+			"table": "superstore"
+		}
+	}
+}

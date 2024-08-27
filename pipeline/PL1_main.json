@@ -1,5 +1,5 @@
 {
-	"name": "PL1_consolidate",
+	"name": "PL1_main",
 	"properties": {
 		"activities": [
 			{
@@ -64,14 +64,7 @@
 				"name": "Copy Customers",
 				"description": "Consolidate the customers into single file",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Copy Orders",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -137,6 +130,12 @@
 						"dependencyConditions": [
 							"Succeeded"
 						]
+					},
+					{
+						"activity": "Copy Orders",
+						"dependencyConditions": [
+							"Succeeded"
+						]
 					}
 				],
 				"policy": {
@@ -194,7 +193,13 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Copy Orders to SQL",
+						"activity": "Copy Customers",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Copy Orders",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -251,11 +256,17 @@
 				]
 			},
 			{
-				"name": "Data flow orders",
+				"name": "Clean Orders",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
 						"activity": "Copy Customers to SQL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Copy Orders to SQL",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -282,11 +293,17 @@
 				}
 			},
 			{
-				"name": "Data flow customers",
+				"name": "Clean Customers",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Data flow orders",
+						"activity": "Copy Customers to SQL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Copy Orders to SQL",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -317,7 +334,13 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Data flow customers",
+						"activity": "Clean Customers",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Clean Orders",
 						"dependencyConditions": [
 							"Succeeded"
 						]
