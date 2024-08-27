@@ -27,7 +27,10 @@
 			],
 			"transformations": [
 				{
-					"name": "FilterNullForOrderTimeStamp"
+					"name": "sort1"
+				},
+				{
+					"name": "filter1"
 				}
 			],
 			"scriptLines": [
@@ -44,8 +47,9 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"source1 filter((!isNull(OrderTimestamp))) ~> FilterNullForOrderTimeStamp",
-				"FilterNullForOrderTimeStamp sink(allowSchemaDrift: true,",
+				"filter1 sort(asc(OrderID, true)) ~> sort1",
+				"source1 filter(ERROR_FUNCTION('')) ~> filter1",
+				"sort1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",
