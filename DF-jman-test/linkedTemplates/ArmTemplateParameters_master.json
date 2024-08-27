@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "DF-jman-test"
+		},
+		"AzureBlobStorageTest_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabaseTest_password": {
+			"value": ""
+		},
+		"AzureSqlDatabaseTest_properties_typeProperties_server": {
+			"value": "sql-admin22.database.windows.net"
+		},
+		"AzureSqlDatabaseTest_properties_typeProperties_database": {
+			"value": "sql_db_test"
+		},
+		"AzureSqlDatabaseTest_properties_typeProperties_userName": {
+			"value": "hari"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

@@ -1,0 +1,77 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "DF-jman-test"
+		},
+		"AzureBlobStorageTest_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageTest'"
+		},
+		"AzureSqlDatabaseTest_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabaseTest'"
+		},
+		"AzureSqlDatabaseTest_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "sql-admin22.database.windows.net"
+		},
+		"AzureSqlDatabaseTest_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "sql_db_test"
+		},
+		"AzureSqlDatabaseTest_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "hari"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "DF-jman-test_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureBlobStorageTest_connectionString": {
+						"value": "[parameters('AzureBlobStorageTest_connectionString')]"
+					},
+					"AzureSqlDatabaseTest_password": {
+						"value": "[parameters('AzureSqlDatabaseTest_password')]"
+					},
+					"AzureSqlDatabaseTest_properties_typeProperties_server": {
+						"value": "[parameters('AzureSqlDatabaseTest_properties_typeProperties_server')]"
+					},
+					"AzureSqlDatabaseTest_properties_typeProperties_database": {
+						"value": "[parameters('AzureSqlDatabaseTest_properties_typeProperties_database')]"
+					},
+					"AzureSqlDatabaseTest_properties_typeProperties_userName": {
+						"value": "[parameters('AzureSqlDatabaseTest_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
