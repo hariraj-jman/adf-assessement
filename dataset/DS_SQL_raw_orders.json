@@ -1,0 +1,16 @@
+{
+	"name": "DS_SQL_raw_orders",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabaseTest",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "raw",
+			"table": "orders"
+		}
+	}
+}
