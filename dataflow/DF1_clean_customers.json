@@ -28,7 +28,13 @@
 			],
 			"transformations": [
 				{
-					"name": "filter1"
+					"name": "AddDuplicate"
+				},
+				{
+					"name": "RemoveDuplicate"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -48,8 +54,24 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"source1 filter((!isNull(Email)) && (!isNull(Country)) && (!isNull(ZipCode)) && (!isNull(State)) && (!isNull(State)) && (!isNull(Address))) ~> filter1",
-				"filter1 sink(allowSchemaDrift: true,",
+				"source1 window(asc(CustomerID, true),",
+				"     Duplicate = iif(lag(CustomerID) == CustomerID, true(), false()) ) ~> AddDuplicate",
+				"AddDuplicate filter((!Duplicate) && (!isNull(Email))) ~> RemoveDuplicate",
+				"RemoveDuplicate select(mapColumn(",
+				"          CustomerID,",
+				"          FirstName,",
+				"          LastName,",
+				"          Email,",
+				"          PhoneNumber,",
+				"          Address,",
+				"          City,",
+				"          State,",
+				"          ZipCode,",
+				"          Country",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",

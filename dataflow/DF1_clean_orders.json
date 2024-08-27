@@ -27,7 +27,10 @@
 			],
 			"transformations": [
 				{
-					"name": "sort1"
+					"name": "AddDuplicate"
+				},
+				{
+					"name": "RemoveDuplicate"
 				}
 			],
 			"scriptLines": [
@@ -44,8 +47,10 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"source1 sort(asc(OrderID, true)) ~> sort1",
-				"sort1 sink(allowSchemaDrift: true,",
+				"source1 window(asc(OrderID, true),",
+				"     Duplicate = iif(lag(OrderID) == OrderID, true(), false()) ) ~> AddDuplicate",
+				"AddDuplicate filter(!Duplicate) ~> RemoveDuplicate",
+				"RemoveDuplicate sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",
